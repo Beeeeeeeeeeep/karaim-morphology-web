@@ -1,5 +1,5 @@
 # Karaim Morphology Explorer
 
-Webowy analizator morfologiczny języka karaimskiego oparty na Karaim Morphology v1.1 i osobnym profilu `historical_western`.
+Webowy analizator morfologiczny języka karaimskiego.
 
-Aplikacja pokazuje kolorowy podział na rdzeń i sufiksy, rozwinięte polskie objaśnienia oraz — gdy jest dostępna — odrębną analizę historyczną.
+Aktualna gałąź produkcyjna: **v1.1.3 productive deep-root** — analiza produktywnych form spoza listy haseł oraz rekurencyjne zejście do najniższego poświadczonego rdzenia.
