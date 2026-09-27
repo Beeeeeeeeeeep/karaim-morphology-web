@@ -217,6 +217,7 @@ def _morpheme_info(code: Optional[str], role: str) -> Dict[str, str]:
     if not code:
         group = ROLE_GROUP.get(role, "other")
         return {"label": GROUP_LABELS[group], "description": "Element rozpoznany na podstawie jego funkcji w analizie."}
+
     if code.startswith("PERS."):
         bits = code.split(".")[-1]
         person = bits[0] if bits and bits[0].isdigit() else "?"
@@ -436,7 +437,8 @@ def analyze(payload: AnalyzeRequest) -> Dict[str, Any]:
     historical.pop("signature", None)
 
     return {
-        "word": word,        "dialect": dialect,
+        "word": word,
+        "dialect": dialect,
         "dialect_label": "automatyczne rozpoznanie / bez twardego ograniczenia" if dialect == "UNKNOWN" else DIALECT_LABELS[dialect],
         "engine_version": engine.VERSION,
         "current": current,
