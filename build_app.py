@@ -74,6 +74,18 @@ def main() -> None:
 
     apply_patch(RUNTIME / "karaim_morph_engine_v1_1.py", patch_dir / "v113_engine.patch")
     apply_patch(RUNTIME / "app.py", patch_dir / "v113_app.patch")
+
+    # In UI, UNKNOWN means "no dialect restriction", not an empty allowed set.
+    app_path = RUNTIME / "app.py"
+    app_text = app_path.read_text(encoding="utf-8")
+    old = 'requested = [] if dialect == "UNKNOWN" else [dialect]'
+    new = 'requested = None if dialect == "UNKNOWN" else [dialect]'
+    if old in app_text:
+        app_text = app_text.replace(old, new)
+    elif new not in app_text:
+        raise RuntimeError("Could not locate dialect-selection line in app.py")
+    app_path.write_text(app_text, encoding="utf-8")
+
     shutil.rmtree(patch_dir)
 
 if __name__ == "__main__":
