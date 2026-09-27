@@ -347,7 +347,8 @@ class KRPSLexicon:
                 gf = None
                 if gf_raw:
                     try:
-                        gf = json.loads(gf_raw)                    except json.JSONDecodeError:
+                        gf = json.loads(gf_raw)
+                    except json.JSONDecodeError:
                         gf = {"raw": gf_raw, "parse_error": True}
                 if headword not in entries:
                     entries[headword] = LexiconEntry(
@@ -696,7 +697,8 @@ def detect_possessive(s: str) -> List[Tuple[str, Segment, float, List[str], List
 
 def detect_regular_case(s: str) -> List[Tuple[str, Segment, float, List[str], List[str]]]:
     out = []
-    for cat, forms in CASE_FORMS.items():        for form, hk in sorted(forms, key=lambda x: len(x[0]), reverse=True):
+    for cat, forms in CASE_FORMS.items():
+        for form, hk in sorted(forms, key=lambda x: len(x[0]), reverse=True):
             if s.endswith(form) and len(s) > len(form):
                 stem = s[:-len(form)]
                 hs, hn = suffix_harmony_score(stem, form, hk)
@@ -1045,7 +1047,8 @@ def _resolve_verb(c: Candidate, lexicon: KRPSLexicon, requested: Iterable[str]) 
     if entry.dialects:
         compatible = intersect_profiles(c.dialect_profiles, entry.dialects)
         if not compatible:
-            return False        c.dialect_profiles = compatible
+            return False
+        c.dialect_profiles = compatible
     c.resolved_lemma = entry.headword
     c.lemma_dialects = list(entry.dialects)
     c.lexicon_match_type = match_type
@@ -1394,7 +1397,8 @@ def _compound_past_candidates(token: str, lexicon: KRPSLexicon, requested: Itera
                                        "IND.PAST.INTRATERMINAL",["fused_aorist_EDI"],["CSATO2012_T"],lexicon,requested,True)
                 if c: out.append(c)
             # -GAn edi pluperfect I
-            for stem,gan in _suffix_matches(pre,PTCP_GAN):                c=_make_verb_candidate(stem,[Segment(gan,"participle","PTCP.PAST.GAN"),aux,pseg],7.4,prof,
+            for stem,gan in _suffix_matches(pre,PTCP_GAN):
+                c=_make_verb_candidate(stem,[Segment(gan,"participle","PTCP.PAST.GAN"),aux,pseg],7.4,prof,
                                        "IND.PLUPERFECT.GAN_EDI",["fused_GAN_EDI"],["CSATO2012_T","HIST_W"],lexicon,requested,True)
                 if c: out.append(c)
     return out
@@ -1744,6 +1748,7 @@ def _historical_western_candidates(token: str, lexicon: KRPSLexicon, requested: 
                                    ["historical_profile:historical_western","fused_SA_EDI"],
                                    ["HIST_W","GULTEKIN2002"],lexicon,requested,True)
             if c: out.append(c)
+
     # Contracted -SA + edi spellings retained as exact historical portmanteaux.
     for stem,form in _suffix_matches(token,HIST_W_COND_PORTMANTEAU):
         c=_make_verb_candidate(stem,[Segment(form,"mood","MOOD.COND.PERF.HIST_W")],8.4,west,
@@ -2092,7 +2097,8 @@ def generate_nominal_derivation_candidates(token: str, lexicon: KRPSLexicon, req
 # every apparent -LIK ending into a derivational analysis.
 LIK_CHAIN_FORMS = ["лыкъ", "лык", "лик", "лук", "люк", "лых", "лих", "лух", "люх"]
 
-def generate_lik_inflection_candidates(token: str, lexicon: KRPSLexicon, requested: Iterable[str]) -> List[Candidate]:    out: List[Candidate] = []
+def generate_lik_inflection_candidates(token: str, lexicon: KRPSLexicon, requested: Iterable[str]) -> List[Candidate]:
+    out: List[Candidate] = []
     # ROOT + LIK + PL + POSS
     for before_poss, pseg, pscore, pnotes, poss_profiles in detect_possessive(token):
         for derived_stem, plseg, plscore, plnotes in detect_plural(before_poss):
@@ -2441,7 +2447,8 @@ def analyze_sequence(text: str, lexicon: KRPSLexicon, dialect: Optional[str] = N
     """
     requested=normalize_dialects(dialect=dialect,dialects=dialects)
     toks=_sequence_tokenize(text)
-    results=[analyze_token(t,lexicon,line=i+1,dialects=requested,historical_profile=historical_profile) for i,t in enumerate(toks)]    seqs=[]
+    results=[analyze_token(t,lexicon,line=i+1,dialects=requested,historical_profile=historical_profile) for i,t in enumerate(toks)]
+    seqs=[]
     cop_surfaces=set(COP_PAST_3SG) | {x for _,forms,_ in COP_PAST_PERSONAL for x in forms}
     for i in range(len(toks)-1):
         a,b=toks[i],toks[i+1]
