@@ -8,8 +8,9 @@ RUN base64 -d /tmp/app_bundle.tar.gz.b64 > /tmp/app_bundle.tar.gz \
  && rm -f /tmp/app_bundle.tar.gz /tmp/app_bundle.tar.gz.b64
 
 COPY v113_patch.tar.gz.b64 /tmp/v113_patch.tar.gz.b64
-COPY apply_unified_patch.py /tmp/apply_unified_patch.py /tmp/fix_unknown.py
+COPY apply_unified_patch.py /tmp/apply_unified_patch.py
 COPY fix_unknown.py /tmp/fix_unknown.py
+
 RUN base64 -d /tmp/v113_patch.tar.gz.b64 > /tmp/v113_patch.tar.gz \
  && mkdir -p /tmp/v113_patch \
  && tar -xzf /tmp/v113_patch.tar.gz -C /tmp/v113_patch \
@@ -17,7 +18,7 @@ RUN base64 -d /tmp/v113_patch.tar.gz.b64 > /tmp/v113_patch.tar.gz \
  && python /tmp/apply_unified_patch.py /app/app.py /tmp/v113_patch/v113_app.patch \
  && python /tmp/fix_unknown.py \
  && grep -F '1.1.3-productive-deep-root' /app/karaim_morph_engine_v1_1.py \
- && rm -rf /tmp/v113_patch /tmp/v113_patch.tar.gz /tmp/v113_patch.tar.gz.b64 /tmp/apply_unified_patch.py
+ && rm -rf /tmp/v113_patch /tmp/v113_patch.tar.gz /tmp/v113_patch.tar.gz.b64 /tmp/apply_unified_patch.py /tmp/fix_unknown.py
 
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
